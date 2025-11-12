@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>v2 dev – متجر فايف إم</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    body{background:#050816;color:#f5f5f5;min-height:100vh;display:flex;flex-direction:column}
+    header{padding:18px 30px;display:flex;justify-content:space-between;align-items:center;background:#050816e6;border-bottom:1px solid #1f2937;backdrop-filter:blur(10px);position:sticky;top:0;z-index:20}
+    .logo{font-weight:800;font-size:22px;letter-spacing:.06em}
+    .logo span{color:#38bdf8}
+    nav{display:flex;gap:18px;font-size:14px;opacity:.85}
+    nav a{color:inherit;text-decoration:none}
+    nav a:hover{color:#38bdf8}
+    main{flex:1;display:flex;flex-direction:column;align-items:center;padding:40px 16px 32px}
+    .hero{max-width:1000px;width:100%;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:32px;align-items:center;margin-bottom:42px}
+    @media(max-width:900px){.hero{grid-template-columns:1fr;text-align:center}}
+    .hero-badge{font-size:12px;display:inline-flex;align-items:center;gap:8px;background:#0b1120;border:1px solid #1f2937;padding:6px 10px;border-radius:999px;margin-bottom:14px}
+    .hero-badge-dot{width:6px;height:6px;border-radius:999px;background:#22c55e;box-shadow:0 0 12px #22c55e}
+    .hero-title{font-size:34px;font-weight:800;margin-bottom:10px}
+    .hero-title span{color:#38bdf8}
+    .hero-sub{font-size:14px;line-height:1.7;color:#9ca3af;margin-bottom:20px}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start}
+    @media(max-width:900px){.hero-actions{justify-content:center}}
+    .btn{padding:10px 18px;border-radius:999px;border:none;cursor:pointer;font-size:14px;display:inline-flex;align-items:center;gap:8px}
+    .btn-primary{background:#38bdf8;color:#020617}
+    .btn-primary:hover{background:#0ea5e9}
+    .btn-outline{background:transparent;color:#e5e7eb;border:1px solid #374151}
+    .btn-outline:hover{border-color:#9ca3af;background:#020617}
+    .hero-card{background:radial-gradient(circle at top left,#38bdf815,#020617);border-radius:24px;padding:20px 20px 22px;border:1px solid #111827;box-shadow:0 18px 45px rgba(15,23,42,.7);position:relative;overflow:hidden}
+    .hero-card-title{font-size:16px;font-weight:700;margin-bottom:6px}
+    .hero-card-sub{font-size:11px;color:#9ca3af;margin-bottom:14px}
+    .badge-pill{font-size:11px;display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 8px;background:#020617;border:1px solid #1f2937;margin-bottom:14px}
+    .badge-pill span{color:#22c55e;font-size:16px}
+    .metric{font-size:11px;color:#9ca3af;display:flex;justify-content:space-between;margin-bottom:4px}
+    .metric strong{color:#e5e7eb;font-size:13px}
+    .glow{position:absolute;inset:auto -40% -120% auto;background:radial-gradient(circle,#38bdf833,transparent 60%);pointer-events:none}
+    .section{max-width:1000px;width:100%;margin-bottom:32px}
+    .section-title{font-size:18px;font-weight:700;margin-bottom:14px}
+    .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+    .product-card{background:#020617;border-radius:18px;padding:14px;border:1px solid #111827;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+    .product-tag{font-size:11px;color:#9ca3af}
+    .product-name{font-size:15px;font-weight:700}
+    .product-desc{font-size:12px;color:#9ca3af;line-height:1.6}
+    .product-price{font-size:13px;font-weight:600;margin-top:4px}
+    .product-price span{font-size:11px;color:#9ca3af}
+    .product-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+    .pill{font-size:11px;background:#0b1120;border-radius:999px;padding:4px 8px;color:#9ca3af;border:1px solid #1f2937}
+    .cart-fab{position:fixed;left:18px;bottom:18px;background:#38bdf8;color:#020617;border-radius:999px;padding:10px 18px;font-size:13px;display:flex;align-items:center;gap:8px;border:none;cursor:pointer;box-shadow:0 10px 30px rgba(56,189,248,.45);z-index:30}
+    .cart-fab span{background:#020617;color:#e5e7eb;border-radius:999px;padding:2px 8px;font-size:11px}
+    footer{padding:14px 18px;border-top:1px solid #111827;font-size:11px;color:#6b7280;text-align:center;background:#020617}
+    .admin-link{color:#9ca3af;text-decoration:none}
+    .admin-link:hover{color:#e5e7eb}
+    .toast{position:fixed;right:16px;bottom:16px;background:#020617;border:1px solid #1f2937;border-radius:12px;padding:10px 12px;font-size:12px;color:#e5e7eb;display:none;align-items:center;gap:8px;z-index:40}
+    .toast-dot{width:8px;height:8px;border-radius:999px;background:#22c55e}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><span>v2</span> dev</div>
+    <nav>
+      <a href="#products">المتجر</a>
+      <a href="#how">طريقة الشراء</a>
+      <a href="#support">الدعم</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="hero-badge">
+          <div class="hero-badge-dot"></div>
+          <div>متجر سكربتات وخدمات فايف إم مربوطة بديسكورد</div>
+        </div>
+        <h1 class="hero-title">خل شغلك <span>احترافي</span> وخلي الباقي على <span>v2 dev</span></h1>
+        <p class="hero-sub">
+          أضف المنتجات من هنا، والعميل يشتري من الموقع، وعند الضغط على شراء يتم تحويله مباشرة إلى الديسكورد
+          لفتح تذكرة فيها كل تفاصيل الطلب بشكل تلقائي.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="scrollToProducts()">تصفح المنتجات</button>
+          <button class="btn btn-outline" onclick="openAdmin()">دخول لوحة المالك</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-title">لوحة المالك</div>
+        <div class="hero-card-sub">إدارة المنتجات والطلبات مربوطة مع البوت</div>
+        <div class="badge-pill"><span>●</span> متصل مع ديسكورد</div>
+        <div class="metric"><span>الطلبات اليوم</span><strong id="stat-orders">0</strong></div>
+        <div class="metric"><span>إجمالي المبيعات</span><strong id="stat-sales">0.00 USD</strong></div>
+        <div class="metric"><span>منتجات فعّالة</span><strong id="stat-products">1</strong></div>
+        <div class="glow"></div>
+      </div>
+    </section>
+
+    <section class="section" id="products">
+      <h2 class="section-title">منتجات مختارة</h2>
+      <div class="products-grid" id="products-grid">
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <h2 class="section-title">كيف تتم العملية؟</h2>
+      <p style="font-size:13px;color:#9ca3af;line-height:1.8">
+        1. العميل يختار المنتج من الموقع ويضغط إضافة للسلة.<br>
+        2. عند الضغط على شراء الآن، يتم تحويله إلى سيرفر الديسكورد الخاص بك.<br>
+        3. البوت يفتح تذكرة تلقائياً ويكتب بداخلها اسم المنتج، السعر، وآي دي المشتري، وتكملون التفاهم داخل التكت.
+      </p>
+    </section>
+
+    <section class="section" id="support">
+      <h2 class="section-title">الدعم</h2>
+      <p style="font-size:13px;color:#9ca3af;line-height:1.8">
+        تحتاج تعديل أو إضافة خاصة؟ تقدر تضيف منتج مخصص داخل لوحة المالك وتخلي التكت يوصلك بكل التفاصيل اللي تحتاجها.
+      </p>
+    </section>
+  </main>
+
+  <button class="cart-fab" onclick="goToDiscord()">
+    إنهاء الطلب عبر الديسكورد
+    <span id="cart-count">0</span>
+  </button>
+
+  <div class="toast" id="toast">
+    <div class="toast-dot"></div>
+    <div id="toast-text">تمت الإضافة إلى السلة</div>
+  </div>
+
+  <footer>
+    <div>v2 dev © كل الحقوق محفوظة</div>
+    <div style="margin-top:4px">
+      <a href="#" class="admin-link" onclick="openAdmin()">لوحة المالك</a>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
